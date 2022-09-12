@@ -10,6 +10,11 @@
         <MDBNavbarItem to="Products" active>
           Produtos
         </MDBNavbarItem>
+
+        <MDBNavbarItem to="/new-product" active>
+          Adicionar produto
+        </MDBNavbarItem>
+
         <MDBNavbarItem to="Orders" active>
           Meus pedidos
         </MDBNavbarItem>
@@ -37,7 +42,7 @@
         </MDBNavbarItem>
       </MDBNavbarNav>
     </MDBCollapse>
-    <MDBNavbarNav>
+    <MDBNavbarNav style="display: flex; flex-direction: row;">
         <!-- Badge -->
         <MDBNavbarItem href="#">
             <span class="badge badge-pill bg-danger">1</span>
