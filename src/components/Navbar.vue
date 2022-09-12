@@ -45,7 +45,7 @@
         </MDBNavbarItem>
 
         <MDBNavbarItem href="#">
-            <MDBBtn outline="danger" class="me-2"> Logout </MDBBtn>
+            <MDBBtn outline="danger" @click="logout" class="me-2"> Logout </MDBBtn>
         </MDBNavbarItem>
 
     </MDBNavbarNav>
@@ -69,6 +69,9 @@
     MDBBtn
   } from 'mdb-vue-ui-kit';
   import { ref } from 'vue';
+  import api from '@/utils/api.js';
+  import { useRouter } from 'vue-router';
+
   export default {
     components: {
       MDBNavbar,
@@ -91,6 +94,31 @@
         collapse1,
         dropdown1
       }
+    },
+    data() {
+        return {
+        router: useRouter(), 
+        }
+    },
+    methods: {
+        logout(){
+            api
+                .post('api/auth/logout')
+                .then((response) => {
+                
+                    console.log("logout: ");
+                    console.log(response.data);
+
+                    this.router.push('/login');
+
+                })
+                .catch((error) => {
+
+                    console.log("erro: ");
+                    console.log(error);
+
+                });
+        },
     }
   };
 </script>

@@ -35,7 +35,6 @@ export default {
     return {
       router: useRouter(), 
     }
-
   },
   methods: {
     testeRoda() {

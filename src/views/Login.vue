@@ -90,7 +90,7 @@
 </template>
 
 <script>
- import {
+import {
     MDBInput,
     MDBCheckbox,
     MDBBtn,
@@ -99,8 +99,12 @@
     MDBTabContent,
     MDBTabItem,
     MDBTabPane,
-  } from "mdb-vue-ui-kit";
-  import { ref } from "vue";
+} from "mdb-vue-ui-kit";
+import { ref } from "vue";
+import api from '@/utils/api.js';
+import { useRouter } from 'vue-router';
+
+
   export default {
     components: {
       MDBInput,
@@ -137,9 +141,36 @@
         isClient
       };
     },
+    data() {
+    return {
+      router: useRouter(), 
+    }
+  },
     methods: {
         login() {
             console.log('Login');
+
+            api
+            .post('api/auth/login', {
+                email: this.form7LoginEmail,
+                password: this.form7LoginPassword,
+            })
+            .then((response) => {
+            
+                console.log("login: ");
+                console.log(response.data);
+                console.log('token', response.data.data.token);
+
+                localStorage.setItem('token', response.data.data.token);
+                this.router.push('/products');
+
+            })
+            .catch((error) => {
+
+                console.log("erro: ");
+                console.log(error);
+
+            });
         },
         register(){
             console.log('Register');
