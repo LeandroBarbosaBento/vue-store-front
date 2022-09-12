@@ -174,6 +174,24 @@ import { useRouter } from 'vue-router';
         },
         register(){
             console.log('Register');
+
+            api
+            .post('api/auth/register', {
+                email: this.form7LoginEmail,
+                name: this.form7RegisterName,
+                password: this.form7LoginPassword,
+                type: this.isClient ? '0' : '1'
+            })
+            .then(() => {
+                this.router.push('/login');
+            })
+            .catch((error) => {
+
+                console.log("erro: ");
+                console.log(error);
+
+            });
+
         },
     }
   };
