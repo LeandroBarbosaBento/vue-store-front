@@ -116,7 +116,7 @@ export default {
 	},
 	methods: {
 		createProduct(){
-			
+
 			this.loader = true;
 
 			var data = {
@@ -143,7 +143,6 @@ export default {
 
 				});
 
-			console.log(data);
 		} 
 	}
 }
