@@ -1,6 +1,8 @@
 <template>
 
+<MDBSpinner v-if="products == null" />
 
+<div class="container-products">
     <div v-for="product in products" :key="product.id">
         <MDBCard style="width: 18rem; margin: 10px;">
             <MDBCardBody>
@@ -14,11 +16,26 @@
             </MDBCardBody>
         </MDBCard>
     </div>
+</div>
 
 </template>
-
+<style scoped>
+.container-products {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+</style>
 <script>
-import { MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardLink } from "mdb-vue-ui-kit";
+import { 
+    MDBCard, 
+    MDBCardBody, 
+    MDBCardTitle, 
+    MDBCardText,
+    MDBCardLink, 
+    MDBSpinner 
+} from "mdb-vue-ui-kit";
 import api from '@/utils/api.js';
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
@@ -31,7 +48,7 @@ import { useRouter } from 'vue-router';
         MDBCardTitle,
         MDBCardText,
         MDBCardLink,
-
+        MDBSpinner
     },
     setup() {
 
