@@ -15,6 +15,10 @@
           Adicionar produto
         </MDBNavbarItem>
 
+        <MDBNavbarItem to="/new-category" active>
+          Adicionar categoria
+        </MDBNavbarItem>
+
         <MDBNavbarItem to="Orders" active>
           Meus pedidos
         </MDBNavbarItem>
