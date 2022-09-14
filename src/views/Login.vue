@@ -1,4 +1,23 @@
 <template>
+
+    <MDBModal
+        id="exampleModal"
+        tabindex="-1"
+        labelledby="exampleModalLabel"
+        v-model="modalShow"
+    >
+    <MDBModalHeader>
+        <MDBModalTitle id="exampleModalLabel"> Erro </MDBModalTitle>
+    </MDBModalHeader>
+    <MDBModalBody>
+        {{ modalMessage }}
+    </MDBModalBody>
+    <MDBModalFooter>
+        <MDBBtn color="secondary" @click="modalShow = false"> Fechar </MDBBtn>
+    </MDBModalFooter>
+    </MDBModal>
+
+
   <div>
     <MDBTabs v-model="form7ActiveTab">
       <!-- Tabs navs -->
@@ -69,12 +88,18 @@
               wrapperClass="mb-4"
             />
 
-            <!-- Checkbox -->
-            <MDBCheckbox
-              label="Deixe marcado para registrar como Cliente. Desmarcado para registrar como Fornecedor"
-              id="isClient"
+            <MDBRadio
+              label="Cliente"
+              name="type"
               v-model="isClient"
-              wrapperClass="d-flex justify-content-center mb-4"
+              value="0"
+            />
+
+            <MDBRadio
+              label="Fornecedor"
+              name="type"
+              v-model="isClient"
+              value="1"
             />
 
             <!-- Submit button -->
@@ -92,13 +117,18 @@
 <script>
 import {
     MDBInput,
-    MDBCheckbox,
     MDBBtn,
     MDBTabs,
     MDBTabNav,
     MDBTabContent,
     MDBTabItem,
     MDBTabPane,
+    MDBModal,
+    MDBModalHeader,
+    MDBModalTitle,
+    MDBModalBody,
+    MDBModalFooter,
+    MDBRadio,
 } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 import api from '@/utils/api.js';
@@ -108,13 +138,18 @@ import { useRouter } from 'vue-router';
   export default {
     components: {
       MDBInput,
-      MDBCheckbox,
       MDBBtn,
       MDBTabs,
       MDBTabNav,
       MDBTabContent,
       MDBTabItem,
       MDBTabPane,
+      MDBModal,
+      MDBModalHeader,
+      MDBModalTitle,
+      MDBModalBody,
+      MDBModalFooter,
+      MDBRadio,
     },
     setup() {
       const form7ActiveTab = ref("form7-login");
@@ -126,7 +161,9 @@ import { useRouter } from 'vue-router';
       const form7RegisterEmail = ref("");
       const form7RegisterPassword = ref("");
       const form7RegisterPasswordRepeat = ref("");
-      const isClient = ref(true);
+      const isClient = ref("0");
+      const modalShow = ref(false);
+      const modalMessage = ref("");
 
       return {
         form7ActiveTab,
@@ -138,7 +175,9 @@ import { useRouter } from 'vue-router';
         form7RegisterEmail,
         form7RegisterPassword,
         form7RegisterPasswordRepeat,
-        isClient
+        isClient,
+        modalShow,
+        modalMessage
       };
     },
     data() {
@@ -156,16 +195,39 @@ import { useRouter } from 'vue-router';
                 password: this.form7LoginPassword,
             })
             .then((response) => {
-            
                 console.log("login: ");
                 console.log(response.data);
-                console.log('token', response.data.data.token);
 
                 localStorage.setItem('token', response.data.data.token);
+                localStorage.setItem('user_data', JSON.stringify(response.data.data.user));
+
+                api
+                  .get('api/categories')
+                  .then((response_categories) => {
+              
+                      console.log("categorias: ");
+                      console.log(response_categories.data);
+
+                      localStorage.setItem('categories', JSON.stringify(response_categories.data));
+
+                  })
+                  .catch((error) => {
+
+                    this.modalShow = true;
+                    this.modalMessage = error.response.data.message;
+
+                    console.log("erro: ");
+                    console.log(error);
+
+                  });
+                
                 this.router.push('/products');
 
             })
             .catch((error) => {
+
+                this.modalShow = true;
+                this.modalMessage = error.response.data.message;
 
                 console.log("erro: ");
                 console.log(error);
@@ -176,21 +238,24 @@ import { useRouter } from 'vue-router';
             console.log('Register');
 
             api
-            .post('api/auth/register', {
-                email: this.form7LoginEmail,
-                name: this.form7RegisterName,
-                password: this.form7LoginPassword,
-                type: this.isClient ? '0' : '1'
-            })
-            .then(() => {
-                this.router.push('/login');
-            })
-            .catch((error) => {
+              .post('api/auth/register', {
+                  email: this.form7LoginEmail,
+                  name: this.form7RegisterName,
+                  password: this.form7LoginPassword,
+                  type: this.isClient
+              })
+              .then(() => {
+                  this.router.push('/login');
+              })
+              .catch((error) => {
+
+                this.modalShow = true;
+                this.modalMessage = error.response.data.message;
 
                 console.log("erro: ");
                 console.log(error);
 
-            });
+              });
 
         },
     }
