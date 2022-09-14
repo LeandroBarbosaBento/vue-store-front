@@ -7,21 +7,27 @@
     ></MDBNavbarToggler>
     <MDBCollapse v-model="collapse1" id="navbarSupportedContent">
       <MDBNavbarNav class="mb-2 mb-lg-0">
-        <MDBNavbarItem to="Products" active>
-          Produtos
-        </MDBNavbarItem>
 
-        <MDBNavbarItem to="/new-product" active>
-          Adicionar produto
-        </MDBNavbarItem>
+        <template v-if="user_data">
+        
+          <MDBNavbarItem to="Products" active>
+            Produtos
+          </MDBNavbarItem>
 
-        <MDBNavbarItem to="/new-category" active>
-          Adicionar categoria
-        </MDBNavbarItem>
+          <MDBNavbarItem to="/new-product" active v-if="user_data.type == '1'">
+            Adicionar produto
+          </MDBNavbarItem>
 
-        <MDBNavbarItem to="Orders" active>
-          Meus pedidos
-        </MDBNavbarItem>
+          <MDBNavbarItem to="/new-category" active v-if="user_data.type == '1'">
+            Adicionar categoria
+          </MDBNavbarItem>
+
+          <MDBNavbarItem to="Orders" active  v-if="user_data.type == '0'">
+            Meus pedidos
+          </MDBNavbarItem>
+
+        </template>
+
         <MDBNavbarItem>
 
           <!-- Navbar dropdown -->
@@ -30,12 +36,22 @@
               tag="a"
               class="nav-link"
               @click="dropdown1 = !dropdown1"
-              >Categorias</MDBDropdownToggle
             >
+              Categorias
+            </MDBDropdownToggle>
             
             <MDBDropdownMenu aria-labelledby="dropdownMenuButton">
-              <MDBDropdownItem href="#">Action</MDBDropdownItem>
-              <MDBDropdownItem href="#">Another Action</MDBDropdownItem>
+
+              <MDBDropdownItem 
+                v-for="category in categories" 
+                :key="category.id" 
+                :href="'/category/' + category.id"
+              >
+
+                  {{ category.name}} 
+
+              </MDBDropdownItem>
+
             </MDBDropdownMenu>
 
           </MDBDropdown>
@@ -53,10 +69,9 @@
             <span><MDBIcon icon="shopping-cart"></MDBIcon></span>
         </MDBNavbarItem>
 
-        <MDBNavbarItem href="#">
-            <MDBBtn outline="danger" @click="logout" class="me-2"> Logout </MDBBtn>
+        <MDBNavbarItem>
+            <MDBBtn outline="danger" ripple @click="logout" class="me-2"> Logout </MDBBtn>
         </MDBNavbarItem>
-
     </MDBNavbarNav>
   </MDBNavbar>
 </template>
@@ -99,24 +114,32 @@
     setup() {
       const collapse1 = ref(false);
       const dropdown1 = ref(false);
+      const user = ref(null);
+
       return {
         collapse1,
-        dropdown1
+        dropdown1,
+        user,
       }
     },
     data() {
         return {
-        router: useRouter(), 
+          router: useRouter(),
+          user_data: JSON.parse(localStorage.getItem('user_data')),
+          categories: JSON.parse(localStorage.getItem('categories')),
         }
     },
     methods: {
         logout(){
+          console.log(this.user_data);
             api
                 .post('api/auth/logout')
                 .then((response) => {
                 
                     console.log("logout: ");
                     console.log(response.data);
+
+                    localStorage. clear();
 
                     this.router.push('/login');
 
