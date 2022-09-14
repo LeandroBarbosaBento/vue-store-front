@@ -1,20 +1,35 @@
 <template>
 
-<MDBSpinner v-if="products == null" />
+    <MDBSpinner v-if="spinnerShow" />
+
+    <MDBModal
+        id="exampleModal"
+        tabindex="-1"
+        labelledby="exampleModalLabel"
+        v-model="modalShow"
+    >
+    <MDBModalHeader>
+        <MDBModalTitle id="exampleModalLabel"> Erro </MDBModalTitle>
+    </MDBModalHeader>
+    <MDBModalBody>
+        Erro ao carregar produtos!
+    </MDBModalBody>
+    <MDBModalFooter>
+        <MDBBtn color="secondary" @click="modalShow = false"> Fechar </MDBBtn>
+    </MDBModalFooter>
+    </MDBModal>
+
 
 <div class="container-products">
     <div v-for="product in products" :key="product.id">
-        <MDBCard style="width: 18rem; margin: 10px;">
-            <MDBCardBody>
-            <MDBCardTitle>{{product.name}}</MDBCardTitle>
-            <MDBCardTitle subtitle class="mb-2 text-muted">Categoria</MDBCardTitle>
-            <MDBCardText>
-                Preço: {{product.price}}
-            </MDBCardText>
-            <MDBCardLink href="#">Card link</MDBCardLink>
-            <MDBCardLink href="#">Another link</MDBCardLink>
-            </MDBCardBody>
-        </MDBCard>
+
+        <Product
+            :product="product"
+            :category="categories.find( category => {
+                        return category.id == product.categories_id
+                    })"
+         />
+
     </div>
 </div>
 
@@ -29,34 +44,42 @@
 </style>
 <script>
 import { 
-    MDBCard, 
-    MDBCardBody, 
-    MDBCardTitle, 
-    MDBCardText,
-    MDBCardLink, 
-    MDBSpinner 
+    MDBBtn,
+    MDBSpinner,
+    MDBModal,
+    MDBModalHeader,
+    MDBModalTitle,
+    MDBModalBody,
+    MDBModalFooter,
 } from "mdb-vue-ui-kit";
 import api from '@/utils/api.js';
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
+import Product from '@/components/Product.vue';
 
 
   export default {
     components: {
-        MDBCard,
-        MDBCardBody,
-        MDBCardTitle,
-        MDBCardText,
-        MDBCardLink,
-        MDBSpinner
+        MDBBtn,
+        MDBSpinner,
+        MDBModal,
+        MDBModalHeader,
+        MDBModalTitle,
+        MDBModalBody,
+        MDBModalFooter,
+        Product,
     },
     setup() {
 
         const products = ref(null);
+        const spinnerShow = ref(true);
+        const modalShow = ref(false);
 
         api
             .get('api/products')
             .then((response) => {
+
+                spinnerShow.value = false;
 
                 products.value = response.data;
         
@@ -66,17 +89,25 @@ import { useRouter } from 'vue-router';
             })
             .catch((error) => {
 
+                spinnerShow.value = false;
+                modalShow.value = true;
+
                 console.log("erro: ");
                 console.log(error);
 
             });
 
-        return {products};
+        return {
+            products,
+            spinnerShow,
+            modalShow
+        };
         
     },
     data() {
         return {
             router: useRouter(), 
+            categories: JSON.parse(localStorage.getItem('categories')),
         }
     },
     methods: {
@@ -84,19 +115,19 @@ import { useRouter } from 'vue-router';
             console.log('Login');
 
             api
-            .get('api/products')
-            .then((response) => {
-        
-                console.log("products: ");
-                console.log(response.data);
+                .get('api/products')
+                .then((response) => {
+            
+                    console.log("products: ");
+                    console.log(response.data);
 
-            })
-            .catch((error) => {
+                })
+                .catch((error) => {
 
-                console.log("erro: ");
-                console.log(error);
+                    console.log("erro: ");
+                    console.log(error);
 
-            });
+                });
         },
         register(){
             console.log('Register');

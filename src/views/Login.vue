@@ -1,5 +1,7 @@
 <template>
 
+<MDBSpinner v-if="spinnerShow" />
+
     <MDBModal
         id="exampleModal"
         tabindex="-1"
@@ -129,6 +131,7 @@ import {
     MDBModalBody,
     MDBModalFooter,
     MDBRadio,
+    MDBSpinner,
 } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 import api from '@/utils/api.js';
@@ -150,6 +153,7 @@ import { useRouter } from 'vue-router';
       MDBModalBody,
       MDBModalFooter,
       MDBRadio,
+      MDBSpinner,
     },
     setup() {
       const form7ActiveTab = ref("form7-login");
@@ -164,6 +168,7 @@ import { useRouter } from 'vue-router';
       const isClient = ref("0");
       const modalShow = ref(false);
       const modalMessage = ref("");
+      const spinnerShow = ref(false);
 
       return {
         form7ActiveTab,
@@ -177,7 +182,8 @@ import { useRouter } from 'vue-router';
         form7RegisterPasswordRepeat,
         isClient,
         modalShow,
-        modalMessage
+        modalMessage,
+        spinnerShow
       };
     },
     data() {
@@ -188,6 +194,8 @@ import { useRouter } from 'vue-router';
     methods: {
         login() {
             console.log('Login');
+
+            this.spinnerShow = true;
 
             api
             .post('api/auth/login', {
@@ -204,6 +212,8 @@ import { useRouter } from 'vue-router';
                 api
                   .get('api/categories')
                   .then((response_categories) => {
+
+                      this.spinnerShow = false;
               
                       console.log("categorias: ");
                       console.log(response_categories.data);
@@ -225,6 +235,8 @@ import { useRouter } from 'vue-router';
 
             })
             .catch((error) => {
+
+              this.spinnerShow = false;
 
                 this.modalShow = true;
                 this.modalMessage = error.response.data.message;
