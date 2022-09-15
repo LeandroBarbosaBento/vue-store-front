@@ -8,7 +8,7 @@
 
     <MDBContainer>
       <div
-        class="d-flex justify-content-center align-items-center"
+        class="d-flex justify-content-center"
         style="height: 100vh; border: 2px solid blue;"
       >
 
