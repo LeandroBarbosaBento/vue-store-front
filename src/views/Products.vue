@@ -19,20 +19,22 @@
     </MDBModalFooter>
     </MDBModal>
 
+<template v-if="categories">
 
-<div class="container-products">
-    <div v-for="product in products" :key="product.id">
+    <div class="container-products">
+        <div v-for="product in products" :key="product.id">
 
-        <Product
-            :product="product"
-            :category="categories.find( category => {
-                        return category.id == product.categories_id
-                    })"
-         />
+            <Product
+                :product="product"
+                :category="categories.find( category => {
+                            return category.id == product.categories_id
+                        })"
+            />
 
+        </div>
     </div>
-</div>
 
+</template>
 </template>
 <style scoped>
 .container-products {

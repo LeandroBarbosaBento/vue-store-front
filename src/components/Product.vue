@@ -13,14 +13,19 @@
     </MDBCardText>
 
     <div class="row g-3 align-items-center">
-      <MDBInput wrapperClass="col-auto" label="Quantidade" type="number" />
+      <MDBInput 
+        :v-model="amount"
+        wrapperClass="col-auto" 
+        label="Quantidade" 
+        type="number" 
+      />
       <div class="col-auto">
         <span id="textExample2" class="form-text">unidade: {{ product.unit }} </span>
       </div>
     </div>
     
     <hr>
-    <MDBBtn color="primary">Adicionar ao carrinho</MDBBtn>
+    <MDBBtn color="primary" @click="adicionarItem">Adicionar ao carrinho</MDBBtn>
   </MDBCardBody>
 </MDBCard>
 
@@ -33,10 +38,10 @@ import {
   MDBCardBody, 
   MDBCardTitle, 
   MDBCardText,
-  /* MDBCardLink, */ 
   MDBInput,
   MDBBtn
 } from "mdb-vue-ui-kit";
+import { ref } from "vue";
 
 export default {
   name: "Product",
@@ -45,7 +50,6 @@ export default {
     MDBCardBody, 
     MDBCardTitle, 
     MDBCardText,
-    /* MDBCardLink, */
     MDBInput,
     MDBBtn
   },
@@ -53,6 +57,18 @@ export default {
     product: Object,
     category: Object,
   },
+   setup(){
+    const amount = ref(0);
+    return {
+      amount,
+    }
+  }, 
+  methods: {
+    adicionarItem(){
+      console.log("Adicionar item");
+      console.log(this.product.name)
+    }
+  }
 };
 </script>
 
