@@ -1,12 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-// import Home from '../views/Home.vue'
 import Cart from '../views/Cart.vue'
 import Login from '../views/Login.vue'
 import NewProduct from '../views/NewProduct.vue'
 import NewCategory from '../views/NewCategory.vue'
 import Orders from '../views/Orders.vue'
 import Products from '../views/Products.vue'
-import ProductsByCategory from '../views/ProductsByCategory.vue'
 
 
 const routes = [
