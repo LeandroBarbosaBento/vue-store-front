@@ -44,7 +44,7 @@
         <td>{{order.created_at.split("T")[0]}}</td>
         <td>{{order.total}}</td>
         <td>
-            <MDBBtn outline="primary" @click="showOrderDetails"> Ver detalhes da compra </MDBBtn>
+            <MDBBtn outline="primary" @click="showOrderDetails(order.id)"> Ver detalhes da compra </MDBBtn>
         </td>
       </tr>
     </tbody>
@@ -81,6 +81,8 @@ import {
 } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 import api from "@/utils/api.js";
+import { useRouter } from 'vue-router';
+
 
 
 
@@ -110,6 +112,7 @@ export default {
     data () {
         return {
             orders: [],
+            router: useRouter(), 
         }
     },
     beforeCreate(){
@@ -139,8 +142,9 @@ export default {
                 });
     },
     methods: {
-        showOrderDetails() {
+        showOrderDetails(id) {
             console.log("ver detalhes");
+            this.router.push('/orders/' + id)
         }
     },
 };
