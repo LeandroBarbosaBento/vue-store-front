@@ -14,7 +14,7 @@
 
     <div class="row g-3 align-items-center">
       <MDBInput 
-        :v-model="amount"
+        v-model="amount"
         wrapperClass="col-auto" 
         label="Quantidade" 
         type="number" 
@@ -42,6 +42,7 @@ import {
   MDBBtn
 } from "mdb-vue-ui-kit";
 import { ref } from "vue";
+import store from "@/store/store.js";
 
 export default {
   name: "Product",
@@ -67,6 +68,12 @@ export default {
     adicionarItem(){
       console.log("Adicionar item");
       console.log(this.product.name)
+
+      store.commit("changeCarrinho", {
+        product: this.product,
+        amount: this.amount,
+        price: this.amount * this.product.price,
+      });
     }
   }
 };

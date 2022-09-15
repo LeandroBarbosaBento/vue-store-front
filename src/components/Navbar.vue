@@ -57,15 +57,13 @@
           </MDBDropdown>
 
         </MDBNavbarItem>
-        <MDBNavbarItem to="#" disabled>
-          Disabled
-        </MDBNavbarItem>
+
       </MDBNavbarNav>
     </MDBCollapse>
     <MDBNavbarNav style="display: flex; flex-direction: row;">
         <!-- Badge -->
-        <MDBNavbarItem href="#">
-            <span class="badge badge-pill bg-danger">1</span>
+        <MDBNavbarItem to="/cart">
+            <span class="badge badge-pill bg-danger">{{carrinho.length}}</span>
             <span><MDBIcon icon="shopping-cart"></MDBIcon></span>
         </MDBNavbarItem>
 
@@ -95,6 +93,7 @@
   import { ref } from 'vue';
   import api from '@/utils/api.js';
   import { useRouter } from 'vue-router';
+  import store from '@/store/store.js';
 
   export default {
     components: {
@@ -127,6 +126,7 @@
           router: useRouter(),
           user_data: JSON.parse(localStorage.getItem('user_data')),
           categories: JSON.parse(localStorage.getItem('categories')),
+          carrinho: store.state.carrinho,
         }
     },
     methods: {
